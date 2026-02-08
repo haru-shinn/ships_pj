@@ -16,28 +16,28 @@ __pycache__/
 # dbt関連の除外
 # -------------------------
 # dbtの実行結果、ログ、コンパイル済みSQLなどが格納されるフォルダ
-dbt-models/target/
-dbt-models/logs/
-dbt-models/dbt_packages/
-dbt-models/dev/
+/dbt_project/target/
+/dbt_project/logs/
+/dbt_project/dbt_packages/
+/dbt_project/dev/
 
 # dbtの環境設定ファイル（機密情報を含む可能性があるため）
-dbt-models/profiles.yml 
-dbt-models/.user.yml
+/dbt_project/profiles.yml 
+/dbt_project/.user.yml
 
 # -------------------------
 # infrastructure配下の不要なフォルダ・ファイルの除外
 # -------------------------
-infrastructure/.terraform/
-infrastructure/generated/
-infrastructure/*.tfstate
-infrastructure/*.tfstate.*
-infrastructure/terraform.tfstate.d/
+/infrastructure/.terraform/
+/infrastructure/generated/
+/infrastructure/*.tfstate
+/infrastructure/*.tfstate.*
+/infrastructure/terraform.tfstate.d/
 
 # -------------------------
 # ドキュメント関連の除外
 # -------------------------
-docs/開発本番反映手順.md
+/docs/開発本番反映手順.md
 
 # -------------------------
 # その他の除外

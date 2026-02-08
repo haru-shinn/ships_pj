@@ -16,7 +16,8 @@
                 "ms-python.vscode-pylance", // 高速な型チェック・補完
                 "innoverio.vscode-dbt-power-user", // dbt関連
                 "dorzey.vscode-sqlfluff", // SQL Lint
-                "HashiCorp.terraform", // SQLLFluff の設定などで HCL が使われる場合
+                "hashicorp.terraform", // Terraform公式拡張
+                "googlecloudtools.cloudcode", // GCP連携用
                 "dagster.dagster" // Dagster 用
             ]
         }

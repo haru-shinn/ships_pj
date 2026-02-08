@@ -152,7 +152,7 @@ graph TB
 - 船：4隻（AppleMaru, BananaMaru, OrangeMaru, GrapeMaru）
 
 |船名|全長|全幅|総トン数|航海速力|旅客定員|
-|--|--|--|--|--|--|--|
+|--|--|--|--|--|--|
 |Apple, Banana|199.6m|27.1m|14500トン|23ノット|502名|
 |Orange, Grape|95.1m|22.1m|15301トン|20ノット|665名|
 
@@ -297,6 +297,8 @@ graph TB
 
 ## 環境構成
 
+### フォルダ構成
+
 ```bash
 ~/ship-pj/
 ├── .devcontainer/      # 開発環境（VS Code設定）
@@ -313,6 +315,29 @@ graph TB
 ├── Dockerfile           # 本番用イメージ（Dagster + dbt）
 ├── docker-compose.yml   # ローカル実行用
 └── requirements.txt
+```
+
+### コンテナ関連の関係性
+
+```mermaid
+graph TD
+    subgraph VSCode_UI [VS Code / Local Environment]
+        A[devcontainer.json] -- "① 起動の司令を出す" --> B[docker-compose.yml]
+        A -- "④ 開発ツールを注入" --> G[VS Code Extensions<br/>'dbt Power User / Python']
+    end
+
+    subgraph Docker_Orchestration [Docker Layer]
+        B -- "② イメージをビルド" --> C[Dockerfile]
+        B -- "⑤ ホスト側のファイルを共有" --> F[(Host Folders<br/>'dbt_project / .config')]
+    end
+
+    subgraph Container_Runtime [Running Container]
+        C -- "③ 実行環境を構成" --> D[Linux OS / Python 3.12]
+        D --> E[dbt-bigquery / gcloud SDK]
+        F -.-> |Mount| E
+    end
+
+    G -.-> |GUI操作を仲介| E
 ```
 
 ---

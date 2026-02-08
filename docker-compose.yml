@@ -1,10 +1,11 @@
 # docker-compose.yml
 services:
   dbt:
-    image: myrepo/dbt:latest
+    image: ships-pj/dbt:latest
     build:
         context: .
         dockerfile: Dockerfile
+        target: development
     volumes:
       - .:/app
       - ~/.config/gcloud:/root/.config/gcloud:ro

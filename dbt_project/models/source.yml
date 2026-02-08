@@ -1,0 +1,39 @@
+version: 2
+
+sources:
+  - name: ships_source
+    schema: >-
+      {%- if target.name == 'prd' -%} ships_raw
+      {%- elif target.name == 'stg' -%} ships_raw_stg
+      {%- elif target.name.startswith('dev') -%} ships_raw_dev
+      {%- endif -%}
+    description: 船マスタ（基本情報）テーブル
+    tables:
+      - name: ships
+        meta:
+          owner: harushin
+        description: 船マスタ（基本情報）テーブル
+        columns:
+          - name: ship_id
+            tests:
+              - unique
+              - not_null
+            description: 船ID
+          - name: ship_name
+            tests:
+              - not_null
+            description: 船名
+          - name: length
+            description: 船の長さ（メートル）
+          - name: width
+            description: 船の幅（メートル）
+          - name: gross_tonnage
+            description: 総トン数
+          - name: service_speed
+            description: 航行速度（ノット）
+          - name: max_passengers
+            description: 最大乗客数
+          - name: start_date
+            description: 就航日
+          - name: end_date
+            description: 退役日
