@@ -6,7 +6,7 @@
     ],
     "service": "dbt",
     "workspaceFolder": "/app/",
-    // コンテナ起動後に実行されるコマンド (オプション)
+    // コンテナ起動後に実行されるコマンド
     "postCreateCommand": "dbt --version",
     // 開発に必要な VS Code 拡張機能
     "customizations": {
@@ -17,7 +17,6 @@
                 "innoverio.vscode-dbt-power-user", // dbt関連
                 "dorzey.vscode-sqlfluff", // SQL Lint
                 "hashicorp.terraform", // Terraform公式拡張
-                "googlecloudtools.cloudcode", // GCP連携用
                 "dagster.dagster" // Dagster 用
             ]
         }
