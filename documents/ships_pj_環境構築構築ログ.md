@@ -7,6 +7,19 @@
 dbt init dbt_project
 
 # profiles.ymlは他の場所から /app/dbt_project/ へ移動する。
+
+# 接続テスト
+dbt debug --target=dev
+
+# コンパイルチェック
+dbt compile --target=dev
+
+# yamlファイル作成の自動化
+# packages.ymlに dbt-labs/codegen を追加して、dbt deps
+# dbt run でテーブルを作成した状態で下記を実行
+dbt run-operation generate_model_yaml --args '{"model_names": ["stg_ports", "stg_routes", "stg_sections", "stg_route_sections", "stg_schedule"]}' --target=dev
+dbt run-operation generate_model_yaml --args '{"model_names": ["stg_ships", "stg_room_class_master", "stg_ship_room_classes"]}' --target=dev
+dbt run-operation generate_model_yaml --args '{"model_names": ["stg_reservations", "stg_reservation_details", "stg_inventory"]}' --target=dev
 ```
 
 ## IaC (Teffaform)

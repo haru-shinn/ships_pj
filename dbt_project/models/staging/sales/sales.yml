@@ -1,0 +1,91 @@
+version: 2
+
+models:
+  - name: stg_reservations
+    description: 予約基本情報テーブル
+    columns:
+      - name: reservation_id
+        data_type: string
+        description: 予約ID
+
+      - name: rep_name
+        data_type: string
+        description: 代表者氏名
+
+      - name: rep_email
+        data_type: string
+        description: 代表者メールアドレス
+
+      - name: reservation_date
+        data_type: date
+        description: 予約日
+
+  - name: stg_reservation_details
+    description: 予約詳細情報テーブル
+    columns:
+      - name: reservation_id
+        data_type: string
+        description: 予約ID
+
+      - name: detail_id
+        data_type: string
+        description: 予約詳細ID
+
+      - name: section_id
+        data_type: string
+        description: 区間ID
+
+      - name: schedule_id
+        data_type: string
+        description: ダイヤID
+
+      - name: passenger_id
+        data_type: string
+        description: 乗客ID
+
+      - name: passenger_type
+        data_type: string
+        description: 乗客タイプ（大人・子供・幼児など）
+
+      - name: ship_id
+        data_type: string
+        description: 船ID
+
+      - name: room_class_id
+        data_type: string
+        description: クラスID
+
+      - name: applied_fare
+        data_type: int64
+        description: 適用運賃
+
+  - name: stg_inventory
+    description: 在庫テーブル
+    columns:
+      - name: schedule_id
+        data_type: string
+        description: ダイヤID
+
+      - name: section_id
+        data_type: string
+        description: 区間ID
+
+      - name: room_class_id
+        data_type: string
+        description: クラスID
+
+      - name: room_count
+        data_type: int64
+        description: 部屋数
+
+      - name: remaining_room_cnt
+        data_type: int64
+        description: 残部屋数
+
+      - name: num_of_people
+        data_type: int64
+        description: 収容人数
+
+      - name: remaining_num_of_people
+        data_type: int64
+        description: 残収容人数

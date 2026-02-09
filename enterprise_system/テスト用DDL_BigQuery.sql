@@ -7,7 +7,7 @@
 -- テーブル：SQLファイル管理
 --------------------------------------------
 
-/* マスタ系テーブル（船・客室・港） */
+/* マスタ系テーブル（船・客室関連） */
 
 /* 船マスタ（基本情報）テーブル */
 DROP TABLE IF EXISTS ships_raw_dev.ships;
@@ -72,6 +72,9 @@ INSERT INTO ships_raw_dev.ship_room_classes (ship_id, room_class_id, room_count,
 ;
 
 
+
+/* マスタ系テーブル（航路・港関連） */
+
 /* 港テーブル */
 DROP TABLE IF EXISTS ships_raw_dev.ports;
 CREATE TABLE ships_raw_dev.ports (
@@ -84,17 +87,15 @@ INSERT INTO ships_raw_dev.ports VALUES
 ;
 
 
-/* 航路・区間・ダイヤ構成 */
-
 /* 航路テーブル */
-DROP TABLE IF EXISTS ships_raw_dev.rooutes;
-CREATE TABLE IF NOT EXISTS ships_raw_dev.rooutes (
+DROP TABLE IF EXISTS ships_raw_dev.routes;
+CREATE TABLE IF NOT EXISTS ships_raw_dev.routes (
   route_id STRING
   , departure_port_id STRING
   , arrival_port_id STRING
 );
 
-INSERT INTO ships_raw_dev.rooutes (route_id, departure_port_id, arrival_port_id) VALUES
+INSERT INTO ships_raw_dev.routes (route_id, departure_port_id, arrival_port_id) VALUES
  ('R1', 'P1', 'P2'), ('R2', 'P1', 'P3')
 ;
 
@@ -129,9 +130,7 @@ INSERT INTO ships_raw_dev.route_sections (section_id, route_id) VALUES
 ;
 
 
-/* 運行スケジュール */
-
-/* 運行スケジュールテーブル */
+/* 運航ダイヤテーブル */
 DROP TABLE IF EXISTS ships_raw_dev.schedule;
 CREATE TABLE IF NOT EXISTS ships_raw_dev.schedule (
   schedule_id STRING
@@ -196,7 +195,8 @@ FROM date_range CROSS JOIN base_timetable
 ;
 
 
-/* 予約・在庫 */
+
+/* トランザクション系テーブル（予約・在庫） */
 
 /* 予約基本情報テーブル */
 DROP TABLE IF EXISTS ships_raw_dev.reservations;
@@ -224,8 +224,8 @@ CREATE TABLE IF NOT EXISTS ships_raw_dev.reservation_details (
 
 
 /* 在庫テーブル */
-DROP TABLE IF EXISTS ships_raw.inventry;
-CREATE TABLE IF NOT EXISTS ships_raw.inventry (
+DROP TABLE IF EXISTS ships_raw_dev.inventory;
+CREATE TABLE IF NOT EXISTS ships_raw_dev.inventory (
   schedule_id STRING
   , section_id STRING
   , room_class_id STRING
@@ -234,7 +234,7 @@ CREATE TABLE IF NOT EXISTS ships_raw.inventry (
   , num_of_people INT64
   , remaining_num_of_people INT64
 );
-INSERT INTO ships_raw.inventry (
+INSERT INTO ships_raw_dev.inventory (
   schedule_id, section_id, room_class_id, room_count, remaining_room_cnt, num_of_people, remaining_num_of_people
 )
 SELECT 
@@ -249,4 +249,3 @@ FROM
   ships_raw_dev.schedule s
   INNER JOIN ships_raw_dev.ship_room_classes src ON s.ship_id = src.ship_id
 ;
-

@@ -13,8 +13,19 @@ snapshot-paths: ["snapshots"]
 clean-targets:
   - "target"
   - "dbt_packages"
+  - "logs"
 
 models:
-  dbt_project:
+  ships_pj:
+    # ----------------------------------------
+    # staging層のモデル設定
+    # ----------------------------------------
     staging:
       +materialized: view
+      ship_management:
+        +schema: stg_ship_management
+      route_operations:
+        +schema: stg_route_operations
+      sales:
+        +schema: stg_sales
+

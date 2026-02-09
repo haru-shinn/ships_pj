@@ -5,7 +5,7 @@ sources:
     schema: >-
       {%- if target.name == 'prd' -%} ships_raw
       {%- elif target.name == 'stg' -%} ships_raw_stg
-      {%- elif target.name.startswith('dev') -%} ships_raw_dev
+      {%- elif target.name =='dev' -%} ships_raw_dev
       {%- endif -%}
     description: 船マスタ（基本情報）テーブル
     tables:
@@ -37,3 +37,227 @@ sources:
             description: 就航日
           - name: end_date
             description: 退役日
+
+      - name: room_class_master
+        meta:
+          owner: harushin
+        description: 客室クラス定義マスタテーブル
+        columns:
+          - name: room_class_id
+            tests:
+              - unique
+              - not_null
+            description: クラスID
+          - name: room_class_name
+            tests:
+              - not_null
+            description: クラス名
+          - name: capacity_per_room
+            description: 1部屋あたりの収容人数
+          - name: description
+            description: クラスの説明
+
+      - name: ship_room_classes
+        meta:
+          owner: harushin
+        description: 船別客室設定テーブル
+        columns:
+          - name: ship_id
+            tests:
+              - not_null
+            description: 船ID
+          - name: room_class_id
+            tests:
+              - not_null
+            description: クラスID
+          - name: room_count
+            description: 部屋数
+          - name: capacity_per_room
+            description: 1部屋あたりの収容人数
+          - name: total_occupancy
+            description: 総収容人数
+
+      - name: ports
+        meta:
+          owner: harushin
+        description: 港テーブル
+        columns:
+          - name: port_id
+            tests:
+              - unique
+              - not_null
+            description: 港ID
+          - name: port_name
+            tests:
+              - not_null
+            description: 港名
+
+      - name: routes
+        meta:
+          owner: harushin
+        description: 航路テーブル
+        columns:
+          - name: route_id
+            tests:
+              - unique
+              - not_null
+            description: 航路ID
+          - name: departure_port_id
+            tests:
+              - not_null
+            description: 出発港ID
+          - name: arrival_port_id
+            tests:
+              - not_null
+            description: 到着港ID
+
+      - name: sections
+        meta:
+          owner: harushin
+        description: 区間テーブル
+        columns:
+          - name: section_id
+            tests:
+              - unique
+              - not_null
+            description: 区間ID
+          - name: departure_port_id
+            tests:
+              - not_null
+            description: 出発港ID
+          - name: arrival_port_id
+            tests:
+              - not_null
+            description: 到着港ID
+          - name: travel_time_minutes
+            description: 所要時間（分）
+
+      - name: route_sections
+        meta:
+          owner: harushin
+        description: 航路区間構成テーブル
+        columns:
+          - name: section_id
+            tests:
+              - not_null
+            description: 区間ID
+          - name: route_id
+            tests:
+              - not_null
+            description: 航路ID
+
+      - name: schedule
+        meta:
+          owner: harushin
+        description: 運行スケジュールテーブル
+        columns:
+          - name: schedule_id
+            tests:
+              - unique
+              - not_null
+            description: ダイヤID
+          - name: route_id
+            tests:
+              - not_null
+            description: 航路ID
+          - name: section_id
+            tests:
+              - not_null
+            description: 区間ID
+          - name: departure_time
+            tests:
+              - not_null
+            description: 出発日時
+          - name: arrival_time
+            tests:
+              - not_null
+            description: 到着日時
+          - name: ship_id
+            tests:
+              - not_null
+            description: 船ID
+
+      - name: reservations
+        meta:
+          owner: harushin
+        description: 予約基本情報テーブル
+        columns:
+          - name: reservation_id
+            tests:
+              - unique
+              - not_null
+            description: 予約ID
+          - name: rep_name
+            tests:
+              - not_null
+            description: 代表者氏名
+          - name: rep_email
+            description: 代表者メールアドレス
+          - name: reservation_date
+            tests:
+              - not_null
+            description: 予約日
+
+      - name: reservation_details
+        meta:
+          owner: harushin
+        description: 予約詳細情報テーブル
+        columns:
+          - name: reservation__id
+            tests:
+              - unique
+              - not_null
+            description: 予約ID
+          - name: detail_id
+            tests:
+              - not_null
+            description: 予約詳細ID
+          - name: section_id
+            tests:
+              - not_null
+            description: 区間ID
+          - name: schedule_id
+            tests:
+              - not_null
+            description: ダイヤID
+          - name: passenger_id
+            description: 乗客ID
+          - name: passenger_type
+            description: 乗客タイプ（大人・子供・幼児など）
+          - name: ship_id
+            tests:
+              - not_null
+            description: 船ID
+          - name: room_class_id
+            tests:
+              - not_null
+            description: クラスID
+          - name: applied_fare
+            description: 適用運賃
+            
+      - name: inventory
+        meta:
+          owner: harushin
+        description: 在庫テーブル
+        columns:
+          - name: schedule_id
+            tests:
+              - not_null
+            description: ダイヤID
+          - name: section_id
+            tests:
+              - not_null
+            description: 区間ID
+          - name: room_class_id
+            tests:
+              - not_null
+            description: クラスID
+          - name: room_count
+            description: 部屋数
+          - name: remaining_room_cnt
+            description: 残部屋数
+          - name: num_of_people
+            description: 収容人数
+          - name: remaining_num_of_people
+            description: 残収容人数
+

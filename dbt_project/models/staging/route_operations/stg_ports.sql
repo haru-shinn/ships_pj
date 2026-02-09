@@ -4,6 +4,9 @@
   )
 }}
 with source as (
-  select * from {{ source('ships_source', 'ships') }}
+  select
+    port_id
+    , port_name
+  from {{ source('ships_source', 'ports') }}
 )
 select * from source

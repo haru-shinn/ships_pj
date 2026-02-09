@@ -257,13 +257,20 @@ graph TB
 - 基幹DBからBigQueryにロードされたデータを、後の工程で使いやすく整えるレイヤー
 - 主な処理: 重複削除（もしあれば）、データ型の最適化（CHARをSTRINGに、タイムスタンプのタイムゾーン調整）、カラム名の標準化。
 - テーブル構成:
-  - stg_ships (船マスタ)
-  - stg_room_classes (客室クラスマスタ)
-  - stg_ship_room_settings (SHIP_ROOM_CLASSESから)
-  - stg_routes / stg_sections / stg_ports (航路・港関連)
-  - stg_schedules (運航ダイヤ)
-  - stg_reservations / stg_reservation_details (予約)
-  - stg_inventory (在庫)
+  - マスタ系テーブル（船・客室関連）
+    - stg_ships (船マスタ（基本情報）テーブル)
+    - stg_room_class_master (客室クラス定義マスタテーブル)
+    - stg_ship_room_classes (船別客室設定テーブル)
+  - マスタ系テーブル（航路・港関連）
+    - stg_ports (港テーブル)
+    - stg_routes（航路テーブル）
+    - stg_sections（区間テーブル）
+    - stg_route_sections（航路区間構成テーブル）
+    - stg_schedules (運航ダイヤテーブル)
+  - トランザクション系テーブル（予約・在庫）
+    - stg_reservations（予約基本情報テーブル）
+    - stg_reservation_details (予約明細情報テーブル)
+    - stg_inventory (在庫テーブル)
 
 ### Intermediate層(int_)
 
