@@ -20,6 +20,11 @@ dbt compile --target=dev
 dbt run-operation generate_model_yaml --args '{"model_names": ["stg_ports", "stg_routes", "stg_sections", "stg_route_sections", "stg_schedule"]}' --target=dev
 dbt run-operation generate_model_yaml --args '{"model_names": ["stg_ships", "stg_room_class_master", "stg_ship_room_classes"]}' --target=dev
 dbt run-operation generate_model_yaml --args '{"model_names": ["stg_reservations", "stg_reservation_details", "stg_inventory"]}' --target=dev
+
+# dbt run (select利用)
+dbt run --target=dev --select models/staging/route_operations
+dbt run --target=dev --select models/staging/sales
+dbt run --target=dev --select models/staging/ship_management
 ```
 
 ## IaC (Teffaform)

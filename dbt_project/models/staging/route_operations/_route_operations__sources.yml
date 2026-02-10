@@ -1,0 +1,110 @@
+version: 2
+
+sources:
+  - name: route_operations_source
+    schema: >-
+      {%- if target.name == 'prd' -%} ships_raw
+      {%- elif target.name == 'stg' -%} ships_raw_stg
+      {%- elif target.name =='dev' -%} ships_raw_dev
+      {%- endif -%}
+    description: 航路運行関連テーブル
+    tables:
+      - name: ports
+        meta:
+          owner: harushin
+        description: 港テーブル
+        columns:
+          - name: port_id
+            tests:
+              - unique
+              - not_null
+            description: 港ID
+          - name: port_name
+            tests:
+              - not_null
+            description: 港名
+
+      - name: routes
+        meta:
+          owner: harushin
+        description: 航路テーブル
+        columns:
+          - name: route_id
+            tests:
+              - unique
+              - not_null
+            description: 航路ID
+          - name: departure_port_id
+            tests:
+              - not_null
+            description: 出発港ID
+          - name: arrival_port_id
+            tests:
+              - not_null
+            description: 到着港ID
+
+      - name: sections
+        meta:
+          owner: harushin
+        description: 区間テーブル
+        columns:
+          - name: section_id
+            tests:
+              - unique
+              - not_null
+            description: 区間ID
+          - name: departure_port_id
+            tests:
+              - not_null
+            description: 出発港ID
+          - name: arrival_port_id
+            tests:
+              - not_null
+            description: 到着港ID
+          - name: travel_time_minutes
+            description: 所要時間（分）
+
+      - name: route_sections
+        meta:
+          owner: harushin
+        description: 航路区間構成テーブル
+        columns:
+          - name: section_id
+            tests:
+              - not_null
+            description: 区間ID
+          - name: route_id
+            tests:
+              - not_null
+            description: 航路ID
+
+      - name: schedules
+        meta:
+          owner: harushin
+        description: 運行スケジュールテーブル
+        columns:
+          - name: schedule_id
+            tests:
+              - unique
+              - not_null
+            description: ダイヤID
+          - name: route_id
+            tests:
+              - not_null
+            description: 航路ID
+          - name: section_id
+            tests:
+              - not_null
+            description: 区間ID
+          - name: departure_time
+            tests:
+              - not_null
+            description: 出発日時
+          - name: arrival_time
+            tests:
+              - not_null
+            description: 到着日時
+          - name: ship_id
+            tests:
+              - not_null
+            description: 船ID

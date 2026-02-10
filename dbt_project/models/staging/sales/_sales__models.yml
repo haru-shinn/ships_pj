@@ -1,18 +1,18 @@
 version: 2
 
 models:
-  - name: stg_reservations
+  - name: stg_sales__reservations
     description: 予約基本情報テーブル
     columns:
       - name: reservation_id
         data_type: string
         description: 予約ID
 
-      - name: rep_name
+      - name: reservation_name
         data_type: string
         description: 代表者氏名
 
-      - name: rep_email
+      - name: reservation_email
         data_type: string
         description: 代表者メールアドレス
 
@@ -20,7 +20,7 @@ models:
         data_type: date
         description: 予約日
 
-  - name: stg_reservation_details
+  - name: stg_sales__reservation_details
     description: 予約詳細情報テーブル
     columns:
       - name: reservation_id
@@ -47,6 +47,10 @@ models:
         data_type: string
         description: 乗客タイプ（大人・子供・幼児など）
 
+      - name: passenger_type_code
+        data_type: string
+        description: 乗客タイプコード（大人=2、子供=1、幼児=0）
+
       - name: ship_id
         data_type: string
         description: 船ID
@@ -59,7 +63,7 @@ models:
         data_type: int64
         description: 適用運賃
 
-  - name: stg_inventory
+  - name: stg_sales__inventories
     description: 在庫テーブル
     columns:
       - name: schedule_id

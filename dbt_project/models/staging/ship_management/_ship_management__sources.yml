@@ -1,0 +1,78 @@
+version: 2
+
+sources:
+  - name: ship_management_source
+    schema: >-
+      {%- if target.name == 'prd' -%} ships_raw
+      {%- elif target.name == 'stg' -%} ships_raw_stg
+      {%- elif target.name =='dev' -%} ships_raw_dev
+      {%- endif -%}
+    description: 船管理関連テーブル
+    tables:
+      - name: ships
+        meta:
+          owner: harushin
+        description: 船マスタ（基本情報）テーブル
+        columns:
+          - name: ship_id
+            tests:
+              - unique
+              - not_null
+            description: 船ID
+          - name: ship_name
+            tests:
+              - not_null
+            description: 船名
+          - name: length
+            description: 船の長さ（メートル）
+          - name: width
+            description: 船の幅（メートル）
+          - name: gross_tonnage
+            description: 総トン数
+          - name: service_speed
+            description: 航行速度（ノット）
+          - name: max_passengers
+            description: 最大乗客数
+          - name: start_date
+            description: 就航日
+          - name: end_date
+            description: 退役日
+
+      - name: room_class_masters
+        meta:
+          owner: harushin
+        description: 客室クラス定義マスタテーブル
+        columns:
+          - name: room_class_id
+            tests:
+              - unique
+              - not_null
+            description: クラスID
+          - name: room_class_name
+            tests:
+              - not_null
+            description: クラス名
+          - name: capacity_per_room
+            description: 1部屋あたりの収容人数
+          - name: description
+            description: クラスの説明
+
+      - name: ship_room_classes
+        meta:
+          owner: harushin
+        description: 船別客室設定テーブル
+        columns:
+          - name: ship_id
+            tests:
+              - not_null
+            description: 船ID
+          - name: room_class_id
+            tests:
+              - not_null
+            description: クラスID
+          - name: room_count
+            description: 部屋数
+          - name: capacity_per_room
+            description: 1部屋あたりの収容人数
+          - name: total_occupancy
+            description: 総収容人数

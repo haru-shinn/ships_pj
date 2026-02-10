@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: stg_ports
+  - name: stg_route_operations__ports
     description: 港テーブル
     columns:
       - name: port_id
@@ -12,7 +12,7 @@ models:
         data_type: string
         description: 港名
 
-  - name: stg_routes
+  - name: stg_route_operations__routes
     description: 航路テーブル
     columns:
       - name: route_id
@@ -27,7 +27,7 @@ models:
         data_type: string
         description: 到着港ID
 
-  - name: stg_sections
+  - name: stg_route_operations__sections
     description: 区間テーブル
     columns:
       - name: section_id
@@ -46,7 +46,7 @@ models:
         data_type: int64
         description: 所要時間（分）
 
-  - name: stg_route_sections
+  - name: stg_route_operations__route_sections
     description: 航路区間構成テーブル
     columns:
       - name: section_id
@@ -57,7 +57,7 @@ models:
         data_type: string
         description: 航路ID
 
-  - name: stg_schedule
+  - name: stg_route_operations__schedules
     description: 運行スケジュールテーブル
     columns:
       - name: schedule_id

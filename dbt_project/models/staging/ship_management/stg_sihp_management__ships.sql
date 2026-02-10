@@ -1,11 +1,11 @@
 {{
   config(
-    materialized='table'
+    materialized='view'
   )
 }}
 with source as (
   select
-    ship_id
+    trim(ship_id) as ship_id
     , ship_name
     , length
     , width
@@ -14,6 +14,6 @@ with source as (
     , max_passenger_capacity
     , start_date
     , end_date
-  from {{ source('ships_source', 'ships') }}
+  from {{ source('ship_management_source', 'ships') }}
 )
 select * from source

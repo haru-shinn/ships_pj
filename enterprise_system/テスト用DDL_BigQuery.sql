@@ -32,15 +32,15 @@ INSERT INTO ships_raw_dev.ships (ship_id, ship_name, length, width, gross_tonnag
 
 
 /* 客室クラス定義マスタテーブル */
-DROP TABLE IF EXISTS ships_raw_dev.room_class_master;
-CREATE TABLE IF NOT EXISTS ships_raw_dev.room_class_master (
+DROP TABLE IF EXISTS ships_raw_dev.room_class_masters;
+CREATE TABLE IF NOT EXISTS ships_raw_dev.room_class_masters (
   room_class_id STRING
   , room_class_name STRING
   , capacity_per_room INT64
-  , notice STRING
+  , description STRING
 );
 
-INSERT INTO ships_raw_dev.room_class_master VALUES
+INSERT INTO ships_raw_dev.room_class_masters VALUES
  ('SY', 'スイート（洋室）', 2, '二名個室。「室単位」で予約。')
  , ('SW', 'スイート（和室）', 4, '四名個室。「室単位」で予約。')
  , ('DX', 'デラックスシングル', 1, '一人用個室。「室単位」で予約。')
@@ -131,8 +131,8 @@ INSERT INTO ships_raw_dev.route_sections (section_id, route_id) VALUES
 
 
 /* 運航ダイヤテーブル */
-DROP TABLE IF EXISTS ships_raw_dev.schedule;
-CREATE TABLE IF NOT EXISTS ships_raw_dev.schedule (
+DROP TABLE IF EXISTS ships_raw_dev.schedules;
+CREATE TABLE IF NOT EXISTS ships_raw_dev.schedules (
   schedule_id STRING
   , route_id STRING
   , section_id STRING
@@ -141,8 +141,8 @@ CREATE TABLE IF NOT EXISTS ships_raw_dev.schedule (
   , ship_id STRING
 );
 
-DELETE FROM ships_raw_dev.schedule WHERE TRUE;
-INSERT INTO ships_raw_dev.schedule (
+DELETE FROM ships_raw_dev.schedules WHERE TRUE;
+INSERT INTO ships_raw_dev.schedules (
     schedule_id, ship_id, route_id, section_id, departure_time, arrival_time
 )
 WITH date_range AS (
@@ -202,8 +202,8 @@ FROM date_range CROSS JOIN base_timetable
 DROP TABLE IF EXISTS ships_raw_dev.reservations;
 CREATE TABLE IF NOT EXISTS ships_raw_dev.reservations (
   reservation_id STRING
-  , rep_name STRING
-  , rep_email STRING
+  , reservation_name STRING
+  , reservation_email STRING
   , reservation_date DATE
 );
 
@@ -224,8 +224,8 @@ CREATE TABLE IF NOT EXISTS ships_raw_dev.reservation_details (
 
 
 /* 在庫テーブル */
-DROP TABLE IF EXISTS ships_raw_dev.inventory;
-CREATE TABLE IF NOT EXISTS ships_raw_dev.inventory (
+DROP TABLE IF EXISTS ships_raw_dev.inventories;
+CREATE TABLE IF NOT EXISTS ships_raw_dev.inventories (
   schedule_id STRING
   , section_id STRING
   , room_class_id STRING
@@ -234,7 +234,7 @@ CREATE TABLE IF NOT EXISTS ships_raw_dev.inventory (
   , num_of_people INT64
   , remaining_num_of_people INT64
 );
-INSERT INTO ships_raw_dev.inventory (
+INSERT INTO ships_raw_dev.inventories (
   schedule_id, section_id, room_class_id, room_count, remaining_room_cnt, num_of_people, remaining_num_of_people
 )
 SELECT 
@@ -246,6 +246,6 @@ SELECT
   , src.total_occupancy
   , src.total_occupancy
 FROM
-  ships_raw_dev.schedule s
+  ships_raw_dev.schedules s
   INNER JOIN ships_raw_dev.ship_room_classes src ON s.ship_id = src.ship_id
 ;

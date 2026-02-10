@@ -1,0 +1,95 @@
+version: 2
+
+sources:
+  - name: sales_source
+    schema: >-
+      {%- if target.name == 'prd' -%} ships_raw
+      {%- elif target.name == 'stg' -%} ships_raw_stg
+      {%- elif target.name =='dev' -%} ships_raw_dev
+      {%- endif -%}
+    description: 予約関連テーブル
+    tables: 
+      - name: reservations
+        meta:
+          owner: harushin
+        description: 予約基本情報テーブル
+        columns:
+          - name: reservation_id
+            tests:
+              - unique
+              - not_null
+            description: 予約ID
+          - name: reservation_name
+            tests:
+              - not_null
+            description: 代表者氏名
+          - name: reservation_email
+            description: 代表者メールアドレス
+          - name: reservation_date
+            tests:
+              - not_null
+            description: 予約日
+
+      - name: reservation_details
+        meta:
+          owner: harushin
+        description: 予約詳細情報テーブル
+        columns:
+          - name: reservation__id
+            tests:
+              - unique
+              - not_null
+            description: 予約ID
+          - name: detail_id
+            tests:
+              - not_null
+            description: 予約詳細ID
+          - name: section_id
+            tests:
+              - not_null
+            description: 区間ID
+          - name: schedule_id
+            tests:
+              - not_null
+            description: ダイヤID
+          - name: passenger_id
+            description: 乗客ID
+          - name: passenger_type
+            description: 乗客タイプ（大人・子供・幼児など）
+          - name: ship_id
+            tests:
+              - not_null
+            description: 船ID
+          - name: room_class_id
+            tests:
+              - not_null
+            description: クラスID
+          - name: applied_fare
+            description: 適用運賃
+            
+      - name: inventories
+        meta:
+          owner: harushin
+        description: 在庫テーブル
+        columns:
+          - name: schedule_id
+            tests:
+              - not_null
+            description: ダイヤID
+          - name: section_id
+            tests:
+              - not_null
+            description: 区間ID
+          - name: room_class_id
+            tests:
+              - not_null
+            description: クラスID
+          - name: room_count
+            description: 部屋数
+          - name: remaining_room_cnt
+            description: 残部屋数
+          - name: num_of_people
+            description: 収容人数
+          - name: remaining_num_of_people
+            description: 残収容人数
+
