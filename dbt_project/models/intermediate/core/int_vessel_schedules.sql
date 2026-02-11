@@ -29,6 +29,9 @@ with join_tbl as (
 
     -- その他情報
     , sec.travel_time_minutes
+
+    -- メタデータ
+    , current_timestamp() as updated_at
   from
     {{ ref('stg_route_operations__schedules') }} as sch
     inner join {{ ref('stg_route_operations__sections') }} as sec

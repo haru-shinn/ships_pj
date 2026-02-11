@@ -285,18 +285,29 @@ WITH random_reservations AS (
     , GENERATE_UUID() as uuid
   FROM random_reservations, UNNEST(GENERATE_ARRAY(1, num_bookings)) AS sub_id
 )
+, numbered_bookings AS (
+  SELECT 
+    *
+    , ROW_NUMBER() OVER(PARTITION BY schedule_id, room_class_id ORDER BY uuid) as booking_rank
+  FROM expanded_bookings
+)
 SELECT 
   res.reservation_id
   , LPAD(CAST(ROW_NUMBER() OVER(PARTITION BY res.reservation_id) AS STRING), 3, '0') AS detail_id
-  , eb.schedule_id
-  , 'P-' || SUBSTR(eb.uuid, 1, 8) AS passenger_id
+  , nb.schedule_id
+  , 'P-' || SUBSTR(nb.uuid, 1, 8) AS passenger_id
   , 'ADULT' AS passenger_type
-  , eb.ship_id
-  , eb.room_class_id
-  , eb.fare AS applied_fare
-FROM expanded_bookings eb
-JOIN (SELECT reservation_id, ROW_NUMBER() OVER() as rn FROM ships_raw_dev.reservations) res 
-  ON MOD(ABS(FARM_FINGERPRINT(eb.uuid)), 5000) = res.rn - 1
+  , nb.ship_id
+  , nb.room_class_id
+  , nb.fare AS applied_fare
+FROM numbered_bookings nb
+INNER JOIN (SELECT reservation_id, ROW_NUMBER() OVER() as rn FROM ships_raw_dev.reservations) res
+  ON MOD(ABS(FARM_FINGERPRINT(nb.uuid)), 5000) = res.rn - 1
+INNER JOIN ships_raw_dev.inventories i 
+  ON nb.schedule_id = i.schedule_id AND nb.room_class_id = i.room_class_id
+WHERE 
+  -- 予約の連番が、在庫（room_count）以下のものだけを採用する
+  nb.booking_rank <= i.room_count
 ;
   
   

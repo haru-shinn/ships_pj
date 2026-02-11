@@ -59,3 +59,7 @@ models:
       - name: travel_time_minutes
         data_type: int64
         description: 所要時間（分）
+      
+      - name: updated_at
+        data_type: timestamp
+        description: レコード更新日時

@@ -36,6 +36,8 @@ with joined_tbl as (
     , rcm.room_class_name
     , res_d.applied_fare
 
+    -- メタデータ
+    , current_timestamp() as updated_at
   from
     {{ ref('stg_sales__reservations') }} as res
     inner join {{ ref('stg_sales__reservation_details') }} as res_d

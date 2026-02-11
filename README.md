@@ -256,7 +256,7 @@ graph TB
 - int_reservation_combined: 
   - stg_reservations と stg_reservation_details を結合。
   - 目的: 予約者情報と明細（乗客ごと）を紐付け。ここで reservation_date と departure_date の差分を計算し、**「予約リードタイム」**を算出する。
-- int_daily_inventory_snapshots: 
+- int_daily_inventory_metrics: 
   - stg_inventory をベースに、在庫消化率などを計算。
 
 ### Mart層(fct_/dim_)

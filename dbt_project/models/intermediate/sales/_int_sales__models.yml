@@ -87,3 +87,7 @@ models:
       - name: applied_fare
         data_type: int64
         description: 適用運賃
+      
+      - name: updated_at
+        data_type: timestamp
+        description: レコード更新日時
