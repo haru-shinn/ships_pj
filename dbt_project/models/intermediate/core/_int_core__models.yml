@@ -1,0 +1,61 @@
+version: 2
+
+models:
+  - name: int_vessel_schedules
+    description: 船舶スケジュールの中間テーブル
+    columns:
+      - name: schedule_id
+        data_type: string
+        description: スケジュールID
+
+      - name: ship_id
+        data_type: string
+        description: 船舶ID
+
+      - name: ship_name
+        data_type: string
+        description: 船舶名
+
+      - name: departure_date
+        data_type: date
+        description: 出港日
+      
+      - name: departure_time
+        data_type: datetime
+        description: 出港時間
+
+      - name: departure_day_of_week
+        data_type: string
+        description: 出港曜日
+
+      - name: arrival_date
+        data_type: date
+        description: 到着日
+
+      - name: arrival_time
+        data_type: datetime
+        description: 到着時間
+
+      - name: arrival_day_of_week
+        data_type: string
+        description: 到着曜日
+
+      - name: dep_section_seq
+        data_type: int64
+        description: 出港セクションシーケンス
+
+      - name: arr_section_seq
+        data_type: int64
+        description: 到着セクションシーケンス
+
+      - name: dep_prot_name
+        data_type: string
+        description: 出港港名
+
+      - name: arr_prot_name
+        data_type: string
+        description: 到着港名
+
+      - name: travel_time_minutes
+        data_type: int64
+        description: 所要時間（分）
