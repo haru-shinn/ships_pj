@@ -51,9 +51,9 @@ CMD ["bash"]
 FROM python:3.12-slim AS production
 
 ENV PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1 TZ=Asia/Tokyo \
-    DBT_PROFILES_DIR=/app/.dbt
+    DBT_PROFILES_DIR=/app/dbt_project
 
-WORKDIR /app/dbt_project
+WORKDIR /app
 
 # 本番に必要な最小限のツール（gcloud等）
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -73,4 +73,4 @@ COPY --from=builder /install /usr/local
 
 USER app
 # 本番用ファイルのコピー（CI/CDビルド時に実行される）
-# COPY --chown=app:app . .
+COPY --chown=app:app . .

@@ -53,6 +53,34 @@ terraform plan
 terraform apply
 ```
 
+## Google Cloud
+
+```bash
+# Artifact Registryへの認証（初回のみ）
+gcloud auth configure-docker asia-northeast1-docker.pkg.dev
+
+# イメージのビルド（マルチプラットフォーム対応に注意）
+docker build -t ships-pj-run-dbt:latest .
+docker tag ships-pj-run-dbt:latest asia-northeast1-docker.pkg.dev/<PROJECT_ID>/ships-pj-dbt-model-repo-dev/ships-pj-run-dbt:latest
+docker run --rm <ビルドしたイメージ名> ls -R /app
+
+# Artifact RegistryへのPush
+docker push asia-northeast1-docker.pkg.dev/<PROJECT_ID>/ships-pj-dbt-model-repo-dev/ships-pj-run-dbt:latest
+
+# Cloud Run Jobs の実行
+gcloud config configurations list
+gcloud config configurations activate default
+gcloud run jobs execute ships-pj-run-dbt-dev --region=asia-northeast1
+
+# ----------------------------------------------- #
+# BigQuery上の資材削除
+bq ls --format=sparse | grep "ships_"
+for ds in $(bq ls --format=sparse | grep "ships_"); do
+  bq rm -r -f -d "$ds"
+done
+```
+
+
 ## CI/CD (GitHub Actions)
 
 ```bash

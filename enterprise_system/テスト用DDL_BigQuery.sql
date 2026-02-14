@@ -274,7 +274,7 @@ WITH random_reservations AS (
   FROM 
     ships_raw_dev.schedules s
     CROSS JOIN ships_raw_dev.ship_room_classes src
-    INNER JOIN ships_dev_seeds_master.fare_type f 
+    INNER JOIN ships_seeds_master_dev.fare_type f 
       ON src.room_class_id = f.room_class_id
   WHERE 
     s.ship_id = src.ship_id
@@ -327,7 +327,7 @@ FROM (
         ELSE 1 -- エコノミー等は1人分
       END) AS booked_people
   FROM ships_raw_dev.reservation_details rd
-  JOIN ships_dev_seeds_master.fare_type f ON rd.room_class_id = f.room_class_id
+  JOIN ships_seeds_master_dev.fare_type f ON rd.room_class_id = f.room_class_id
   JOIN ships_raw_dev.room_class_masters m ON rd.room_class_id = m.room_class_id
   GROUP BY 1, 2
 ) agg
