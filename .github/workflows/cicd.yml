@@ -64,6 +64,8 @@ jobs:
             --image ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}-${{ env.ENV }}/${{ env.IMAGE_NAME }}:${{ github.sha }} \
             --region ${{ env.REGION }} \
             --project ${{ env.PROJECT_ID }}
+            --command "/bin/sh" \
+            --args "-c,dbt deps && dbt run --target=${{ env.ENV }} && dbt test --target=${{ env.ENV }}"
 
       # -----------------------------------------
       # featureブランチ（開発環境）の場合のみ、即時実行して確認する
