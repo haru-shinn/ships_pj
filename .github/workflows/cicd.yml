@@ -1,0 +1,76 @@
+name: CI/CD for dbt Cloud Run Jobs
+
+on:
+  push:
+    branches:
+      - 'main'
+      - 'feature/**'
+    paths:
+      - 'dbt_project/models/**'
+
+env:
+  # -----------------------------------------
+  # ブランチによって環境名とプロジェクトIDを切り替え
+  # (GitHub Secretsに CP_SA_EKY, GCP_PROJECT_ID_DEV, GCP_PROJECT_ID_PRD を登録しておく)
+  # -----------------------------------------
+  ENV: ${{ github.ref == 'refs/heads/main' && 'prd' || 'dev' }}
+  PROJECT_ID: ${{ github.ref == 'refs/heads/main' && secrets.GCP_PROJECT_ID_PRD || secrets.GCP_PROJECT_ID_DEV }}
+  REGION: asia-northeast1
+  REPO_NAME: ships-pj-dbt-model-repo
+  IMAGE_NAME: ships-pj-run-dbt
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # -----------------------------------------
+      # Google Cloud 認証
+      # -----------------------------------------
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY }}' # 適切な権限を持つSAのキー
+
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v2'
+
+      # -----------------------------------------
+      # Docker 認証設定
+      # -----------------------------------------
+      - name: 'Docker Auth'
+        run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev
+
+      # -----------------------------------------
+      # ビルド & プッシュ (TAGにコミットハッシュを使用)
+      # -----------------------------------------
+      - name: Build and Push Container
+        run: |
+          FULL_IMAGE_NAME="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}-${{ env.ENV }}/${{ env.IMAGE_NAME }}"
+          TAG="${{ github.sha }}"
+          
+          docker build -t $FULL_IMAGE_NAME:$TAG -t $FULL_IMAGE_NAME:latest .
+          docker push $FULL_IMAGE_NAME:$TAG
+          docker push $FULL_IMAGE_NAME:latest
+
+      # -----------------------------------------
+      # Cloud Run Jobs の更新
+      # -----------------------------------------
+      - name: Update Cloud Run Job
+        run: |
+          gcloud run jobs update ships-pj-run-dbt-${{ env.ENV }} \
+            --image ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}-${{ env.ENV }}/${{ env.IMAGE_NAME }}:${{ github.sha }} \
+            --region ${{ env.REGION }} \
+            --project ${{ env.PROJECT_ID }}
+
+      # -----------------------------------------
+      # featureブランチ（開発環境）の場合のみ、即時実行して確認する
+      # -----------------------------------------
+      - name: Execute Job (Dev only)
+        if: github.ref != 'refs/heads/main'
+        run: |
+          gcloud run jobs execute ships-pj-run-dbt-${{ env.ENV }} \
+            --region ${{ env.REGION }} \
+            --project ${{ env.PROJECT_ID }}

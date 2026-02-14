@@ -86,7 +86,7 @@ resource "google_cloud_run_v2_job" "cloud_run_job_dbt_model" {
       containers {
         image       = "asia-northeast1-docker.pkg.dev/${var.project_configs[terraform.workspace]}/ships-pj-dbt-model-repo-${terraform.workspace == "development" ? "dev" : "prd"}/ships-pj-run-dbt:latest"
         command     = ["/bin/sh", "-c"]
-        args        = ["dbt deps && dbt run --target=${terraform.workspace == "development" ? "dev" : "prd"}"]
+        args        = ["dbt deps && dbt run && dbt test --target=${terraform.workspace == "development" ? "dev" : "prd"}"]
         working_dir = "/app/dbt_project"
         resources {
           limits = {
