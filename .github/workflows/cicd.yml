@@ -51,7 +51,7 @@ jobs:
           FULL_IMAGE_NAME="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}-${{ env.ENV }}/${{ env.IMAGE_NAME }}"
           TAG="${{ github.sha }}"
           
-          docker build -t $FULL_IMAGE_NAME:$TAG -t $FULL_IMAGE_NAME:latest .
+          docker build --target production -t $FULL_IMAGE_NAME:$TAG -t $FULL_IMAGE_NAME:latest .
           docker push $FULL_IMAGE_NAME:$TAG
           docker push $FULL_IMAGE_NAME:latest
 
