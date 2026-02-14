@@ -59,7 +59,7 @@ terraform apply
 # Artifact Registryへの認証（初回のみ）
 gcloud auth configure-docker asia-northeast1-docker.pkg.dev
 
-# イメージのビルド（マルチプラットフォーム対応に注意）
+# イメージのビルド
 docker build -t ships-pj-run-dbt:latest .
 docker tag ships-pj-run-dbt:latest asia-northeast1-docker.pkg.dev/<PROJECT_ID>/ships-pj-dbt-model-repo-dev/ships-pj-run-dbt:latest
 docker run --rm <ビルドしたイメージ名> ls -R /app
