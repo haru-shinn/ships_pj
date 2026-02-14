@@ -5,8 +5,8 @@ on:
     branches:
       - 'main'
       - 'feature/**'
-    paths:
-      - 'dbt_project/models/**'
+    # paths:
+    #   - 'dbt_project/models/**'
 
 env:
   # -----------------------------------------
