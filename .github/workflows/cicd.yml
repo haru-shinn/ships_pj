@@ -63,7 +63,7 @@ jobs:
           gcloud run jobs update ships-pj-run-dbt-${{ env.ENV }} \
             --image ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}-${{ env.ENV }}/${{ env.IMAGE_NAME }}:${{ github.sha }} \
             --region ${{ env.REGION }} \
-            --project ${{ env.PROJECT_ID }}
+            --project ${{ env.PROJECT_ID }} \
             --command "/bin/sh" \
             --args "-c,dbt deps && dbt run --target=${{ env.ENV }} && dbt test --target=${{ env.ENV }}"
 
