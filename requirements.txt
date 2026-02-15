@@ -6,3 +6,6 @@ dbt-colibri==0.2.7
 dagster
 dagster-webserver
 dagster-dbt
+dagster-gcp
+pandas
+pyarrow

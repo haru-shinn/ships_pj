@@ -19,7 +19,8 @@ RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
 FROM python:3.12-slim AS development
 
 ENV PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1 TZ=Asia/Tokyo \
-    DBT_PROFILES_DIR=/app/dbt_project
+    DBT_PROFILES_DIR=/app/dbt_project \
+    DBT_SA_KEYS_PATH=/app/.gcp/keyfile.json
 
 WORKDIR /app
 
@@ -51,7 +52,8 @@ CMD ["bash"]
 FROM python:3.12-slim AS production
 
 ENV PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1 TZ=Asia/Tokyo \
-    DBT_PROFILES_DIR=/app/dbt_project
+    DBT_PROFILES_DIR=/app/dbt_project \
+    DBT_SA_KEYS_PATH=/app/.gcp/keyfile.json
 
 WORKDIR /app
 

@@ -84,11 +84,25 @@ done
 ## CI/CD (GitHub Actions)
 
 ```bash
-
+- dbtのCI/CD化 失敗している。。
+　- 現状: 最新イメージを直接プッシュ＋手動実行で成功。中身（profiles.yml や models）は正しいことは確認済み。
+　- 残りの課題: GitHub Actions (cicd.yml) 経由で、イメージ更新とコマンド（args）設定を完全に同期させること。
 ```
 
 ## オーケストレーション (dagster)
 
 ```bash
+# 構築
+# 手動でファイルを配置した。
 
+# 実行
+dagster dev
 ```
+
+## その他
+
+- 2026/02/15 
+  - CI/CDはできていないが、IaCとdagster を試すことはできた。
+  - Cloud Run Jobs など、クラウド環境の整備などが大変である。
+  - dbt以外のツールのお試しができたため、本PJは終了する。
+  - dbtでの追加のマート作成などの設計や考え方の学習は別のPJで行う。
